@@ -9,7 +9,7 @@
   <input nglFormControl type="text" placeholder="My input" [required]="required">
 </ngl-form-element>
 
-<ngl-form-element [error]="hasError ? error : null" class="slds-m-top--small">
+<ngl-form-element tooltipHelp="Some helpful information" [error]="hasError ? error : null" class="slds-m-top--small">
   <ng-template nglFormLabel><i>Textarea Label</i> <span *ngIf="required">(<b>required</b>!)</span></ng-template>
   <textarea nglFormControl placeholder="Placeholder Text" [required]="required"></textarea>
 </ngl-form-element>

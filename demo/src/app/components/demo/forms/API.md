@@ -3,6 +3,7 @@
 ### Input
   * `label?: string | TemplateRef`: Input label.
   * `error?: string`: Error message.
+  * `tooltipHelp?: string`: Inline help tooltip.
 
 ### Content
 

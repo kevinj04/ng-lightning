@@ -89,6 +89,9 @@ export class NglDatatable {
   }
 
   ngOnDestroy() {
-    this._columnsSubscription.unsubscribe();
+    if (this._columnsSubscription) {
+      this._columnsSubscription.unsubscribe();
+      this._columnsSubscription = null;
+    }
   }
 };

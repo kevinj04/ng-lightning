@@ -1,24 +1,20 @@
-import {Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ElementRef, Renderer2} from '@angular/core';
-import {replaceClass} from '../util/util';
+import {Component, Input, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
   selector: 'ngl-avatar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './avatar.pug',
+  host: {
+    '[class.slds-avatar]': 'true',
+  }
 })
 export class NglAvatar {
   @Input() src: string = '';
   @Input() alternativeText: string = '';
 
-  @Input('size') set setSize(value: string) {
-    this.updateClass(this._size, value);
-    this._size = value;
-  }
+  @Input() size: string;
 
-  @Input('variant') set setVariant(value: string) {
-    this.updateClass(this._variant, value);
-    this._variant = value;
-  }
+  @Input() variant: string;
 
   @Input() initials: string;
 
@@ -26,22 +22,13 @@ export class NglAvatar {
 
   @Output() onError = new EventEmitter();
 
-  private _variant: string;
-  private _size: string;
   private error = false;
 
-  constructor(public element: ElementRef, public renderer: Renderer2) {
-    renderer.addClass(element.nativeElement, 'slds-avatar');
-  }
-
-  ngOnInit() {
-    if (!this._variant) {
-      this.renderer.addClass(this.element.nativeElement, 'slds-avatar_rectangle');
-    }
-
-    if (!this._size) {
-      this.renderer.addClass(this.element.nativeElement, 'slds-avatar_medium');
-    }
+  hostClass() {
+    return {
+      [`slds-avatar_${this.size || 'medium'}`]: true,
+      [`slds-avatar_${this.variant || 'rectangle'}`]: true,
+    };
   }
 
   fallbackIconClass() {
@@ -58,7 +45,4 @@ export class NglAvatar {
     this.onError.emit();
   }
 
-  private updateClass(oldValue: string, newValue: string) {
-    replaceClass(this, `slds-avatar_${oldValue}`, newValue ? `slds-avatar_${newValue}` : '');
-  }
 };

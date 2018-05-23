@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {NgHostModule} from '../common/host/host.module';
 
 import {NglToast} from './toast';
 import {NglToastClose} from './toast-close';
@@ -13,6 +14,6 @@ const NGL_TOAST_DIRECTIVES = [
 @NgModule({
   declarations: [NGL_TOAST_DIRECTIVES],
   exports: [NGL_TOAST_DIRECTIVES],
-  imports: [CommonModule, NglIconsModule],
+  imports: [CommonModule, NglIconsModule, NgHostModule],
 })
 export class NglToastModule {}

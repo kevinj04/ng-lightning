@@ -2,3 +2,5 @@ img(*ngIf="shouldShowImage; else template_initials", [src]="src", [alt]="alterna
 
 ng-template(#template_initials)
   abbr.slds-avatar__initials([ngClass]="fallbackIconClass()") {{ initials }}
+
+ng-host([ngClass]="hostClass()")

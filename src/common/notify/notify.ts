@@ -6,14 +6,7 @@ export class NglCommonNotify {
   /**
    * The type of alert.
    */
-  @Input() set variant(variant: 'error' | 'info' | 'success' | 'warning') {
-    this.toggleThemeClass(false, this.variant);
-    this._variant = variant;
-    this.toggleThemeClass(true, this.variant);
-  }
-  get variant() {
-    return this._variant || 'info';
-  }
+  @Input() variant: 'error' | 'info' | 'success' | 'warning';
 
   @Input() iconName: string;
 
@@ -47,13 +40,16 @@ export class NglCommonNotify {
 
   private currentTimeout: any = null;
 
-  private _variant: 'error' | 'info' | 'success' | 'warning';
-
   constructor(private element: ElementRef, private renderer: Renderer2, private cd: ChangeDetectorRef, type: 'alert' | 'toast') {
     this.renderer.addClass(this.element.nativeElement, 'slds-notify');
     this.renderer.addClass(this.element.nativeElement, `slds-notify_${type}`);
-    this.toggleThemeClass(true, this.variant);
     this.renderer.setAttribute(this.element.nativeElement, 'role', 'alert');
+  }
+
+  hostClass() {
+    return {
+      [`slds-theme_${this.variant || 'info'}`]: true,
+    };
   }
 
   close(reason?: string, $event?: Event) {
@@ -74,12 +70,5 @@ export class NglCommonNotify {
       clearTimeout(this.currentTimeout);
       this.currentTimeout = null;
     }
-  }
-
-  private toggleThemeClass(isAdd: boolean, klass: string) {
-    if (!klass) return;
-
-    const el = this.element.nativeElement;
-    this.renderer[isAdd ? 'addClass' : 'removeClass'](el, `slds-theme_${klass}`);
   }
 }

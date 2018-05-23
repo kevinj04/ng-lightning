@@ -1,12 +1,11 @@
-import { Component, Input, ChangeDetectionStrategy, ElementRef, Renderer2, OnChanges, SimpleChanges } from '@angular/core';
-import { changeClass } from '../util/util';
+import { Component, Input, ChangeDetectionStrategy, ElementRef, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'ngl-progress-bar',
   templateUrl: './progressbar.pug',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NglProgressBar implements OnChanges {
+export class NglProgressBar {
 
   /**
    * The percentage value of the progress bar.
@@ -38,9 +37,10 @@ export class NglProgressBar implements OnChanges {
     this.renderer.setAttribute(this.element.nativeElement, 'aria-valuemax', '100');
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const { size: changedSize, variant: changedVariant } = changes;
-    changeClass(`slds-progress-bar_`, changedSize, this.element, this.renderer);
-    changeClass(`slds-progress-bar_`, changedVariant, this.element, this.renderer);
+  hostClass() {
+    return {
+      [`slds-progress-bar_${this.size}`]: !!this.size,
+      [`slds-progress-bar_${this.variant}`]: !!this.variant,
+    };
   }
 };

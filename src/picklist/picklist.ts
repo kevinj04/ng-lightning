@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, Input, Output, EventEmitter, ContentChild, ViewChild, ElementRef} from '@angular/core';
-import 'rxjs/add/operator/filter';
+import {filter} from 'rxjs/operators';
 import {NglPicklistItemTemplate} from './item';
 import {NglPick} from '../pick/pick';
 import {toBoolean} from '../util/util';
@@ -76,7 +76,7 @@ export class NglPicklist {
   constructor(private pick: NglPick) {}
 
   ngAfterContentInit() {
-    this._changeSubscription = this.pick.nglPickChange.filter(() => !this.pick.isMultiple)
+    this._changeSubscription = this.pick.nglPickChange.pipe(filter(() => !this.pick.isMultiple))
                                 .subscribe(() => this.openChange.emit(false));
   }
 

@@ -1,5 +1,5 @@
 import {Component, Input, ChangeDetectorRef, ContentChild, ContentChildren, QueryList, ElementRef, Renderer2, HostBinding, Output, EventEmitter} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {NglDatatableColumn} from './column';
 import {NglDatatableLoadingOverlay, NglDatatableNoRowsOverlay} from './overlays';
 

@@ -1,13 +1,6 @@
 import {Component, ContentChild, ChangeDetectionStrategy, Input, Output, EventEmitter, ElementRef, Renderer2, ChangeDetectorRef, ViewChild, TemplateRef, OnChanges} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/skip';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/publish';
+import {Observable, BehaviorSubject, of} from 'rxjs';
+import {skip, tap, debounceTime, distinctUntilChanged, switchMap, publish, refCount} from 'rxjs/operators';
 import {NglLookupItemTemplate, NglLookupLabelTemplate} from './item';
 import {NglLookupScopeItem} from './scope-item';
 import {uniqueId, isObject} from '../util/util';
@@ -101,24 +94,27 @@ export class NglLookup implements OnChanges {
   }
 
   ngOnInit() {
-    let valueStream = this.inputSubject.skip(1)
-      .do((value: string) => {
+    let valueStream = this.inputSubject.pipe(
+      skip(1),
+      tap((value: string) => {
         this.lastUserInput = value;
         this.activeIndex = -1;
         this.valueChange.emit(value);
-      });
+      }));
 
     if (this.debounce > 0) {
-      valueStream = valueStream.debounceTime(this.debounce);
+      valueStream = valueStream.pipe(debounceTime(this.debounce));
     }
 
-    const suggestions$ = valueStream
-      .distinctUntilChanged()
-      .switchMap((value: string) => {
+    const suggestions$ = valueStream.pipe(
+      distinctUntilChanged(),
+      switchMap((value: string) => {
         const suggestions = this.lookup(value);
-        return suggestions instanceof Observable ? suggestions : Observable.of(suggestions);
-      })
-      .publish().refCount(); // Single instance
+        return suggestions instanceof Observable ? suggestions : of(suggestions);
+      }),
+      publish(),
+      refCount(),
+    ); // Single instance
 
     suggestions$.subscribe((suggestions: any[]) => {
       this.suggestions = suggestions;

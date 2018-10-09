@@ -2,7 +2,7 @@ import {Directive, Input, ElementRef, ComponentRef, TemplateRef, ViewContainerRe
         Renderer2, ComponentFactoryResolver, Injector, EmbeddedViewRef, ComponentFactory,
         Output, EventEmitter, NgZone} from '@angular/core';
 import * as Tether from 'tether';
-import 'rxjs/add/operator/take';
+import {take} from 'rxjs/operators';
 import {NglPopover, Direction} from './popover';
 import {placement} from './placements';
 import {toBoolean} from '../util/util';
@@ -150,7 +150,7 @@ export class NglPopoverTrigger {
     this.popover = this.componentRef.instance;
     this.popover.header = this.nglPopoverHeader;
     this.popover.footer = this.nglPopoverFooter;
-    this.popover.afterViewInit.take(1).subscribe(() => this.position(false));
+    this.popover.afterViewInit.pipe(take(1)).subscribe(() => this.position(false));
 
     if (this.nglInteractive) {
       this.interactiveSubscription = this.popover.onInteraction.subscribe((enter: boolean) => this.nglOpen = enter);
